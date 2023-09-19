@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AgunanPinjam extends Model
 {
     use HasFactory;
-    protected $fillable = ['id', 'no_rekening', 'nama_debitur', 'nama_peminjam', 'tanggal_pinjam', 'tanggal_kembali', 'keperluan', 'status_id'];
+    protected $fillable = ['id', 'no_rekening', 'nama_debitur', 'nama_peminjam', 'tanggal_pinjam', 'ttd1', 'ttd2', 'tanggal_kembali', 'keperluan', 'status_id'];
 
     public function statusAgunan()
     {

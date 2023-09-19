@@ -10,14 +10,18 @@ use Filament\Tables\Table;
 use App\Models\AgunanMasuk;
 use App\Models\AgunanPinjam;
 use Filament\Resources\Resource;
+use Filament\Forms\Actions\Action;
 use Illuminate\Support\Collection;
+use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AgunanPinjamResource\Pages;
+use Saade\FilamentAutograph\Forms\Components\SignaturePad;
 use App\Filament\Resources\AgunanPinjamResource\RelationManagers;
+use Saade\FilamentAutograph\Forms\Components\Enums\DownloadableFormat;
 
 class AgunanPinjamResource extends Resource
 {
@@ -32,33 +36,58 @@ class AgunanPinjamResource extends Resource
     {
         return $form
             ->schema([
+                Card::make()->schema([
 
-                Select::make('no_rekening')
-                    ->options(AgunanMasuk::query()->pluck('no_rekening', 'no_rekening'))
-                    ->live()
-                    ->searchable(),
 
-                Select::make('nama_debitur')
-                    ->options(fn (Get $get): Collection => AgunanMasuk::query()
-                        ->where('no_rekening', $get('no_rekening'))
-                        ->pluck('nama_debitur', 'nama_debitur')),
+                    Select::make('no_rekening')
+                        ->options(AgunanMasuk::query()->pluck('no_rekening', 'no_rekening'))
+                        ->live()
+                        ->searchable(),
 
-                Forms\Components\TextInput::make('nama_peminjam')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\DatePicker::make('tanggal_pinjam')
-                    ->required(),
-                Forms\Components\DatePicker::make('tanggal_kembali'),
-                Forms\Components\Textarea::make('keperluan')
-                    ->maxLength(65535)
-                    ->columnSpanFull(),
-                // Forms\Components\TextInput::make('status_id')
-                //     ->required()
-                //     ->columnSpanFull(),
-                Select::make('status_id')
-                    ->relationship('statusAgunan', 'nama_status')
-                    ->default(3)
-                    ->selectablePlaceholder(false),
+                    Select::make('nama_debitur')
+                        ->options(fn (Get $get): Collection => AgunanMasuk::query()
+                            ->where('no_rekening', $get('no_rekening'))
+                            ->pluck('nama_debitur', 'nama_debitur')),
+
+                    Forms\Components\TextInput::make('nama_peminjam')
+                        ->required()
+                        ->maxLength(255),
+                    Forms\Components\DatePicker::make('tanggal_pinjam')
+                        ->required(),
+                    SignaturePad::make('ttd1')->label(__('TTD Meminjam'))
+                        ->filename('autograph')             // Filename of the downloaded file (defaults to 'signature')
+                        ->downloadable()
+
+                        ->backgroundColor('rgba(0,0,0,0)')                // Allow download of the signature (defaults to false)
+                        ->downloadableFormats([             // Available formats for download (defaults to all)
+                            DownloadableFormat::PNG,
+                            DownloadableFormat::JPG,
+                            DownloadableFormat::SVG,
+                        ])
+                        ->downloadActionDropdownPlacement('center-end'),
+                    Forms\Components\Textarea::make('keperluan')
+                        ->maxLength(65535)
+                        ->columnSpanFull(),
+                    Forms\Components\DatePicker::make('tanggal_kembali'),
+                    SignaturePad::make('ttd2')->label(__('TTD Pegembalian'))
+                        ->filename('autograph')             // Filename of the downloaded file (defaults to 'signature')
+                        ->downloadable()
+                        ->backgroundColor('rgba(0,0,0,0)')                // Allow download of the signature (defaults to false)
+                        ->downloadableFormats([             // Available formats for download (defaults to all)
+                            DownloadableFormat::PNG,
+                            DownloadableFormat::JPG,
+                            DownloadableFormat::SVG,
+                        ])
+                        ->downloadActionDropdownPlacement('center-end'),
+                    // Forms\Components\TextInput::make('status_id')
+                    //     ->required()
+                    //     ->columnSpanFull(),
+
+                    Select::make('status_id')
+                        ->relationship('statusAgunan', 'nama_status')
+                        ->default(3)
+                        ->selectablePlaceholder(false),
+                ])
             ]);
     }
 
@@ -83,10 +112,11 @@ class AgunanPinjamResource extends Resource
                 Tables\Columns\TextColumn::make('tanggal_pinjam')
                     ->date()
                     ->sortable(),
+                TextColumn::make('ttd1')->hidden(),
                 Tables\Columns\TextColumn::make('tanggal_kembali')
                     ->date()
                     ->sortable(),
-
+                TextColumn::make('ttd2')->hidden(),
                 TextColumn::make('statusAgunan.nama_status')
                     ->sortable()
                     ->searchable()

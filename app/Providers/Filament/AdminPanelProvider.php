@@ -11,17 +11,18 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
+use FilipFonal\FilamentLogManager\FilamentLogManager;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use App\Filament\Resources\AgunanMasukResource\Widgets\StatsAgunan;
 use App\Filament\Resources\BerkasMasukResource\Widgets\StatsOverview;
 use App\Filament\Resources\AgunanMasukResource\Widgets\AgunanMasukStats;
-use App\Filament\Resources\AgunanMasukResource\Widgets\StatsAgunan;
-use Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin;
 
 // use App\Filament\Resources\AgunanMasukResource\Widgets\StatsAgunanMasuk;
 
