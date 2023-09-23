@@ -40,7 +40,8 @@ class BerkasPinjamResource extends Resource
                     Select::make('no_rekening')
                         ->options(BerkasMasuk::query()->pluck('no_rekening', 'no_rekening'))
                         ->live()
-                        ->searchable(),
+                        ->searchable()
+                        ->unique(ignoreRecord: true),
 
                     Select::make('nama_debitur')
                         ->preload()
